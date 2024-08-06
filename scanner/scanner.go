@@ -1,6 +1,9 @@
 package scanner
 
 import (
+	"os"
+	"path/filepath"
+
 	"github.com/hillu/go-yara/v4"
 	"golang.org/x/sync/errgroup"
 )
@@ -78,4 +81,43 @@ func (scanner *FilesScanner) Scan(rules *yara.Rules) (yara.MatchRules, error) {
 		matches = append(matches, ruleMatch...)
 	}
 	return matches, err
+}
+
+type DirScanner struct {
+	dirPath string
+}
+
+func NewDirScanner(dirPath string) *DirScanner {
+	return &DirScanner{
+		dirPath: dirPath,
+	}
+}
+
+func (scanner *DirScanner) Scan(rules *yara.Rules) (yara.MatchRules, error) {
+	dirEntries, err := os.ReadDir(scanner.dirPath)
+	if err != nil {
+		return nil, err
+	}
+	var matches yara.MatchRules
+	var filePaths []string
+	for _, dirEntry := range dirEntries {
+		path := filepath.Join(scanner.dirPath, dirEntry.Name())
+		if dirEntry.IsDir() {
+			dirScanner := NewDirScanner(path)
+			ruleMatches, err := dirScanner.Scan(rules)
+			if err != nil {
+				return nil, err
+			}
+			matches = append(matches, ruleMatches...)
+		} else {
+			filePaths = append(filePaths, path)
+		}
+	}
+	fileScanner := NewFilesScanner(filePaths)
+	ruleMatches, err := fileScanner.Scan(rules)
+	if err != nil {
+		return nil, err
+	}
+	matches = append(matches, ruleMatches...)
+	return matches, nil
 }

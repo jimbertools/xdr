@@ -18,17 +18,7 @@ func TestByteScanner(t *testing.T) {
 		condition:
 			$str
 	}`
-
-	const xyzRule string = `
-	rule xyzRule {
-		meta: 
-			author = "Wannes Vantorre"
-		strings:
-			$str = "xyz"
-		condition:
-			$str
-	}`
-	factory := utils.NewRuleFactory()
+	factory := utils.NewRuleFactory([]string{abcRule})
 	rules, err := factory.GetAllRules()
 	if err != nil {
 		t.Fatalf(`GetAllRules() error = %v`, err)
@@ -41,7 +31,26 @@ func TestByteScanner(t *testing.T) {
 }
 
 func TestFileScanner(t *testing.T) {
-	factory := utils.NewRuleFactory()
+	const abcRule string = `
+	rule abcRule {
+		meta: 
+			author = "Wannes Vantorre"
+		strings:
+			$str = "abc"
+		condition:
+			$str
+	}`
+
+	const xyzRule string = `
+	rule xyzRule {
+		meta: 
+			author = "Wannes Vantorre"
+		strings:
+			$str = "xyz"
+		condition:
+			$str
+	}`
+	factory := utils.NewRuleFactory([]string{abcRule, xyzRule})
 	rules, err := factory.GetAllRules()
 	if err != nil {
 		t.Fatalf(`GetAllRules() error = %v`, err)

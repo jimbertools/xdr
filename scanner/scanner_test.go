@@ -9,6 +9,25 @@ import (
 )
 
 func TestByteScanner(t *testing.T) {
+	const abcRule string = `
+	rule abcRule {
+		meta: 
+			author = "Wannes Vantorre"
+		strings:
+			$str = "abc"
+		condition:
+			$str
+	}`
+
+	const xyzRule string = `
+	rule xyzRule {
+		meta: 
+			author = "Wannes Vantorre"
+		strings:
+			$str = "xyz"
+		condition:
+			$str
+	}`
 	factory := utils.NewRuleFactory()
 	rules, err := factory.GetAllRules()
 	if err != nil {

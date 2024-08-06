@@ -70,3 +70,26 @@ func TestFileScanner(t *testing.T) {
 		t.Fatalf(`Scan() error = %v`, fmt.Errorf("expected xyzRule, got %s", result[1].Rule))
 	}
 }
+
+func TestFilesScanner(t *testing.T) {
+	rulesFilePath := "../test_files/rules.yar"
+	factory := utils.NewFileRuleFactory([]string{rulesFilePath})
+	rules, err := factory.GetAllRules()
+	if err != nil {
+		t.Fatalf(`GetAllRules() error = %v`, err)
+	}
+	scanner := scanner.NewFilesScanner([]string{"../test_files/test.txt"})
+	result, err := scanner.Scan(rules)
+	if err != nil {
+		t.Fatalf(`Scan() error = %v`, err)
+	}
+	if len(result) != 2 {
+		t.Fatalf(`Scan() error = %v`, fmt.Errorf("expected 2 results, got %d", len(result)))
+	}
+	if result[0].Rule != "abcRule" {
+		t.Fatalf(`Scan() error = %v`, fmt.Errorf("expected abcRule, got %s", result[0].Rule))
+	}
+	if result[1].Rule != "xyzRule" {
+		t.Fatalf(`Scan() error = %v`, fmt.Errorf("expected xyzRule, got %s", result[1].Rule))
+	}
+}

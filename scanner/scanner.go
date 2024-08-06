@@ -12,6 +12,12 @@ type BytesScanner struct {
 	bytes []byte
 }
 
+func NewBytesScanner(bytes []byte) *BytesScanner {
+	return &BytesScanner{
+		bytes: bytes,
+	}
+}
+
 func (scanner *BytesScanner) Scan(rules *yara.Rules) (yara.MatchRules, error) {
 	var matches yara.MatchRules
 	err := rules.ScanMem(scanner.bytes, 0, 0, &matches)

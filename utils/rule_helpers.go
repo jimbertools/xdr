@@ -17,7 +17,7 @@ func NewRuleFactory() *RuleFactory {
 	}
 
 	const abcRule string = `
-	rule test {
+	rule abcRule {
 		meta: 
 			author = "Wannes Vantorre"
 		strings:
@@ -27,7 +27,7 @@ func NewRuleFactory() *RuleFactory {
 	}`
 
 	const xyzRule string = `
-	rule test {
+	rule xyzRule {
 		meta: 
 			author = "Wannes Vantorre"
 		strings:

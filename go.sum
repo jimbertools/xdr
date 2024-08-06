@@ -1,2 +1,4 @@
 github.com/hillu/go-yara/v4 v4.3.3 h1:O+7iYTZK20fzsXiJyvA0d529RTdnZCrgS6HdE0O7BMg=
 github.com/hillu/go-yara/v4 v4.3.3/go.mod h1:AHEs/FXVMQKVVlT6iG9d+q1BRr0gq0WoAWZQaZ0gS7s=
+golang.org/x/sync v0.8.0 h1:3NFvSEYkUoMifnESzZl15y791HH1qU2xm6eCJU5ZPXQ=
+golang.org/x/sync v0.8.0/go.mod h1:Czt+wKu1gCyEFDUtn0jG5QVvpJ6rzVqr5aXyt9drQfk=

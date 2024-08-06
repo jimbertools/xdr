@@ -2,6 +2,7 @@ package scanner
 
 import (
 	"github.com/hillu/go-yara/v4"
+	"golang.org/x/sync/errgroup"
 )
 
 type Scanner interface {
@@ -34,8 +35,47 @@ func NewFileScanner(filePath string) *FileScanner {
 	}
 }
 
-func (scanner *FileScanner) Scan(rules *yara.Rules) (yara.MatchRules, error) { 
+func (scanner *FileScanner) Scan(rules *yara.Rules) (yara.MatchRules, error) {
 	var matches yara.MatchRules
 	err := rules.ScanFile(scanner.filePath, 0, 0, &matches)
+	return matches, err
+}
+
+type FilesScanner struct {
+	fileScanners []FileScanner
+}
+
+func NewFilesScanner(filePaths []string) *FilesScanner {
+	fileScanners := []FileScanner{}
+	for _, filePath := range filePaths {
+		fileScanners = append(fileScanners, *NewFileScanner(filePath))
+	}
+	return &FilesScanner{
+		fileScanners: fileScanners,
+	}
+}
+
+func (scanner *FilesScanner) Scan(rules *yara.Rules) (yara.MatchRules, error) {
+	matchesChannel := make(chan yara.MatchRules)
+	errorGroup := errgroup.Group{}
+	var err error
+	for _, fileScanner := range scanner.fileScanners {
+		errorGroup.Go(func() error {
+			ruleMatches, err := fileScanner.Scan(rules)
+			if err != nil {
+				return err
+			}
+			matchesChannel <- ruleMatches
+			return nil
+		})
+	}
+	go func() {
+		err = errorGroup.Wait()
+		close(matchesChannel)
+	}()
+	var matches yara.MatchRules
+	for ruleMatch := range matchesChannel {
+		matches = append(matches, ruleMatch...)
+	}
 	return matches, err
 }

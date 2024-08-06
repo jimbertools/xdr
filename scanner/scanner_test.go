@@ -18,7 +18,7 @@ func TestByteScanner(t *testing.T) {
 		condition:
 			$str
 	}`
-	factory := utils.NewRuleFactory([]string{abcRule})
+	factory := utils.NewStringRuleFactory([]string{abcRule})
 	rules, err := factory.GetAllRules()
 	if err != nil {
 		t.Fatalf(`GetAllRules() error = %v`, err)
@@ -50,7 +50,7 @@ func TestFileScanner(t *testing.T) {
 		condition:
 			$str
 	}`
-	factory := utils.NewRuleFactory([]string{abcRule, xyzRule})
+	factory := utils.NewStringRuleFactory([]string{abcRule, xyzRule})
 	rules, err := factory.GetAllRules()
 	if err != nil {
 		t.Fatalf(`GetAllRules() error = %v`, err)

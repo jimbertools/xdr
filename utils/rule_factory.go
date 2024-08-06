@@ -46,6 +46,7 @@ func NewFileRuleFactory(rulesFilePaths []string) *FileRuleFactory {
 		ruleFile, err := os.Open(ruleFilePath)
 		if err != nil {
 			log.Println("Error opening YARA rule file:", err)
+			continue
 		}
 		if err = ruleCompiler.AddFile(ruleFile, ""); err != nil {
 			log.Println("Error adding YARA rule:", err)

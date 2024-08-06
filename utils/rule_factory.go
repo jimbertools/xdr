@@ -2,6 +2,7 @@ package utils
 
 import (
 	"log"
+	"os"
 
 	"github.com/hillu/go-yara/v4"
 )
@@ -15,7 +16,7 @@ type StringRuleFactory struct {
 	compiler *yara.Compiler
 }
 
-func NewRuleFactory(rules []string) *StringRuleFactory {
+func NewStringRuleFactory(rules []string) *StringRuleFactory {
 	ruleCompiler, err := yara.NewCompiler()
 	if ruleCompiler == nil || err != nil {
 		log.Fatal("Error to create compiler:", err)
@@ -29,5 +30,30 @@ func NewRuleFactory(rules []string) *StringRuleFactory {
 }
 
 func (factory *StringRuleFactory) GetAllRules() (*yara.Rules, error) {
+	return factory.compiler.GetRules()
+}
+
+type FileRuleFactory struct {
+	compiler *yara.Compiler
+}
+
+func NewFileRuleFactory(rulesFilePaths []string) *FileRuleFactory {
+	ruleCompiler, err := yara.NewCompiler()
+	if ruleCompiler == nil || err != nil {
+		log.Fatal("Error to create compiler:", err)
+	}
+	for _, ruleFilePath := range rulesFilePaths {
+		ruleFile, err := os.Open(ruleFilePath)
+		if err != nil {
+			log.Println("Error opening YARA rule file:", err)
+		}
+		if err = ruleCompiler.AddFile(ruleFile, ""); err != nil {
+			log.Println("Error adding YARA rule:", err)
+		}
+	}
+	return &FileRuleFactory{ruleCompiler}
+}
+
+func (factory *FileRuleFactory) GetAllRules() (*yara.Rules, error) {
 	return factory.compiler.GetRules()
 }

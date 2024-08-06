@@ -1,10 +1,21 @@
 package utils
 
+import (
+	"log"
+
+	"github.com/hillu/go-yara/v4"
+)
+
 type RuleFactory struct {
-	rules []string
+	compiler *yara.Compiler
 }
 
 func NewRuleFactory() *RuleFactory {
+	ruleCompiler, err := yara.NewCompiler()
+	if ruleCompiler == nil || err != nil {
+		log.Fatal("Error to create compiler:", err)
+	}
+
 	const abcRule string = `
 	rule test {
 		meta: 
@@ -24,10 +35,17 @@ func NewRuleFactory() *RuleFactory {
 		condition:
 			$str
 	}`
+
 	rules := []string{abcRule, xyzRule}
-	return &RuleFactory{rules: rules}
+
+	for _, rule := range rules {
+		if err = ruleCompiler.AddString(rule, ""); err != nil {
+			log.Fatal("Error adding YARA rule:", err)
+		}
+	}
+	return &RuleFactory{ruleCompiler}
 }
 
-func (factory *RuleFactory) GetAllRules() []string {
-	return factory.rules
+func (factory *RuleFactory) GetAllRules() (*yara.Rules, error) {
+	return factory.compiler.GetRules()
 }

@@ -6,8 +6,8 @@ import (
 
 func TestGetAllRules(t *testing.T) {
 	factory := NewRuleFactory()
-	rules := factory.GetAllRules()
-	if len(rules) != 2 {
-		t.Fatalf(`len(GetAllRules()) = %d, want 2`, len(rules))
+	_, err := factory.GetAllRules()
+	if err != nil {
+		t.Fatalf(`GetAllRules() error = %v`, err)
 	}
 }

@@ -1,4 +1,4 @@
-package tracker
+package journal
 
 import (
 	"context"
@@ -17,12 +17,12 @@ type DiskTracker struct {
 	volume   *Volume.Volume
 	journal  *Usn.Journal
 	filter   Usn.Filter
-	process Usn.Processor
+	process  Usn.Processor
 	interval time.Duration
 }
 
 // Please close the DiskTracker when done. Only accepts one letter disk names.
-func NewDiskTracker(diskLetter string, filter Usn.Filter, processor Usn.Processor,  interval time.Duration) (DiskTracker, error) {
+func NewDiskTracker(diskLetter string, filter Usn.Filter, processor Usn.Processor, interval time.Duration) (DiskTracker, error) {
 	volumePath := fmt.Sprintf(`\\.\%s:`, strings.ToUpper(diskLetter))
 
 	volume, err := Volume.New(volumePath)

@@ -9,8 +9,8 @@ import (
 
 	LibYara "github.com/hillu/go-yara/v4"
 	"github.com/jimbertools/volmgmt/usn"
+	tracker "github.com/vantorrewannes/file-scanner/pkg/file_scanner/journal"
 	Yara "github.com/vantorrewannes/file-scanner/pkg/file_scanner/yara"
-	"github.com/vantorrewannes/file-scanner/tracker"
 )
 
 func main() {

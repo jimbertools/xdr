@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/vantorrewannes/file-scanner/scanner"
-	"github.com/vantorrewannes/file-scanner/utils"
+	"github.com/vantorrewannes/file-scanner/rules"
 )
 
 func TestByteScanner(t *testing.T) {

@@ -11,7 +11,7 @@ import (
 	"github.com/jimbertools/volmgmt/usn"
 	"github.com/vantorrewannes/file-scanner/scanner"
 	"github.com/vantorrewannes/file-scanner/tracker"
-	"github.com/vantorrewannes/file-scanner/utils"
+	"github.com/vantorrewannes/file-scanner/rules"
 )
 
 func main() {

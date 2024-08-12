@@ -1,4 +1,4 @@
-package utils
+package yara
 
 import (
 	"log"

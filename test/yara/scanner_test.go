@@ -1,11 +1,9 @@
-package scanner_test
+package test_yara
 
 import (
 	"fmt"
 	"testing"
-
-	"github.com/vantorrewannes/file-scanner/scanner"
-	"github.com/vantorrewannes/file-scanner/rules"
+	"github.com/vantorrewannes/file-scanner/pkg/file_scanner/yara"
 )
 
 func TestByteScanner(t *testing.T) {
@@ -18,12 +16,12 @@ func TestByteScanner(t *testing.T) {
 		condition:
 			$str
 	}`
-	factory := utils.NewStringRuleFactory([]string{abcRule})
+	factory := yara.NewStringRuleFactory([]string{abcRule})
 	rules, err := factory.GetAllRules()
 	if err != nil {
 		t.Fatalf(`GetAllRules() error = %v`, err)
 	}
-	scanner := scanner.NewBytesScanner([]byte("abc"))
+	scanner := yara.NewBytesScanner([]byte("abc"))
 	_, err = scanner.Scan(rules)
 	if err != nil {
 		t.Fatalf(`Scan() error = %v`, err)
@@ -50,12 +48,12 @@ func TestFileScanner(t *testing.T) {
 		condition:
 			$str
 	}`
-	factory := utils.NewStringRuleFactory([]string{abcRule, xyzRule})
+	factory := yara.NewStringRuleFactory([]string{abcRule, xyzRule})
 	rules, err := factory.GetAllRules()
 	if err != nil {
 		t.Fatalf(`GetAllRules() error = %v`, err)
 	}
-	scanner := scanner.NewFileScanner("../test_files/test.txt")
+	scanner := yara.NewFileScanner("../test_files/test.txt")
 	result, err := scanner.Scan(rules)
 	if err != nil {
 		t.Fatalf(`Scan() error = %v`, err)
@@ -73,12 +71,12 @@ func TestFileScanner(t *testing.T) {
 
 func TestFilesScanner(t *testing.T) {
 	rulesFilePath := "../test_files/rules.yar"
-	factory := utils.NewFileRuleFactory([]string{rulesFilePath})
+	factory := yara.NewFileRuleFactory([]string{rulesFilePath})
 	rules, err := factory.GetAllRules()
 	if err != nil {
 		t.Fatalf(`GetAllRules() error = %v`, err)
 	}
-	scanner := scanner.NewFilesScanner([]string{"../test_files/test.txt"})
+	scanner := yara.NewFilesScanner([]string{"../test_files/test.txt"})
 	result, err := scanner.Scan(rules)
 	if err != nil {
 		t.Fatalf(`Scan() error = %v`, err)
@@ -95,9 +93,9 @@ func TestFilesScanner(t *testing.T) {
 }
 
 func TestDirScanner(t *testing.T) {
-	scanner := scanner.NewDirScanner("../test_files/test_dir")
+	scanner := yara.NewDirScanner("../test_files/test_dir")
 	rulesFilePath := "../test_files/rules.yar"
-	factory := utils.NewFileRuleFactory([]string{rulesFilePath})
+	factory := yara.NewFileRuleFactory([]string{rulesFilePath})
 	rules, err := factory.GetAllRules()
 	if err != nil {
 		t.Fatalf(`GetAllRules() error = %v`, err)

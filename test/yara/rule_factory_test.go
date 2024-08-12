@@ -1,7 +1,8 @@
-package utils
+package test_yara
 
 import (
 	"testing"
+	"github.com/vantorrewannes/file-scanner/pkg/file_scanner/yara"
 )
 
 func TestStringRuleFactory(t *testing.T) {
@@ -14,7 +15,7 @@ func TestStringRuleFactory(t *testing.T) {
 		condition:
 			$str
 	}`
-	factory := NewStringRuleFactory([]string{abcRule})
+	factory := yara.NewStringRuleFactory([]string{abcRule})
 	_, err := factory.GetAllRules()
 	if err != nil {
 		t.Fatalf(`GetAllRules() error = %v`, err)
@@ -23,7 +24,7 @@ func TestStringRuleFactory(t *testing.T) {
 
 func TestFileRuleFactory(t *testing.T) {
 	rulesFilePath := "../test_files/rules.yar"
-	factory := NewFileRuleFactory([]string{rulesFilePath})
+	factory := yara.NewFileRuleFactory([]string{rulesFilePath})
 	_, err := factory.GetAllRules()
 	if err != nil {
 		t.Fatalf(`GetAllRules() error = %v`, err)

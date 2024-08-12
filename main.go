@@ -7,16 +7,15 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hillu/go-yara/v4"
+	LibYara "github.com/hillu/go-yara/v4"
 	"github.com/jimbertools/volmgmt/usn"
-	"github.com/vantorrewannes/file-scanner/scanner"
+	Yara "github.com/vantorrewannes/file-scanner/pkg/file_scanner/yara"
 	"github.com/vantorrewannes/file-scanner/tracker"
-	"github.com/vantorrewannes/file-scanner/rules"
 )
 
 func main() {
 	rulesFilePath := "yara-rules-core.yar"
-	factory := utils.NewFileRuleFactory([]string{rulesFilePath})
+	factory := Yara.NewFileRuleFactory([]string{rulesFilePath})
 	rules, err := factory.GetAllRules()
 	if err != nil {
 		log.Fatalf(`GetAllRules() error = %v`, err)
@@ -41,10 +40,10 @@ func main() {
 	}
 }
 
-func printPaths(filePathsChannel chan string, rules *yara.Rules) {
+func printPaths(filePathsChannel chan string, rules *LibYara.Rules) {
 	fmt.Println("STARTED")
 	for filePath := range filePathsChannel {
-		fileScanner := scanner.NewFileScanner(filePath)
+		fileScanner := Yara.NewFileScanner(filePath)
 		matches, err := fileScanner.Scan(rules)
 		if err != nil && err.Error() == "could not open file" {
 			fmt.Println("LOCKED: ", filePath)
@@ -53,7 +52,7 @@ func printPaths(filePathsChannel chan string, rules *yara.Rules) {
 		}
 		if err == nil && len(matches) > 0 {
 			fmt.Println("HIT: ", filePath)
-		} else if err == nil{
+		} else if err == nil {
 			fmt.Println("MISS: ", filePath)
 		}
 	}

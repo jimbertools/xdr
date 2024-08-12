@@ -8,7 +8,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-type Scanner interface {
+type YaraScanner interface {
 	Scan(rules *yara.Rules) (yara.MatchRules, error)
 }
 

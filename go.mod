@@ -9,4 +9,7 @@ require (
 	golang.org/x/sync v0.8.0
 )
 
-require golang.org/x/sys v0.6.0 // indirect
+require (
+	bitbucket.org/creachadair/stringset v0.0.14
+	golang.org/x/sys v0.6.0 // indirect
+)

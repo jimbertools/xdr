@@ -53,21 +53,18 @@ func (diskWatcher *DiskWatcher) Watch(ctx context.Context) error {
 
 func (diskWatcher *DiskWatcher) processRecord(record usn.Record, maxTries int) {
 	path := fmt.Sprintf(`%s:\\%s`, string(diskWatcher.diskLetter), record.Path)
-	fmt.Println("NEW:", path)
-
 	for tries := 0; tries < maxTries; tries++ {
 		fileScanner := yara.NewFileScanner(path)
 		matches, err := fileScanner.Scan(diskWatcher.yaraRules)
 
 		if err == nil {
 			if len(matches) > 0 {
-				fmt.Println("HIT:", path)
+				log.Println("VIRUS:", path)
 			} else {
-				fmt.Println("MISS:", path)
+				log.Println("CLEAN:", path)
 			}
 			return
 		}
 		time.Sleep(time.Millisecond * 200)
 	}
-	log.Printf("ERROR PROCESSING: %s \n", path)
 }

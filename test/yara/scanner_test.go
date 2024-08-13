@@ -3,7 +3,8 @@ package test_yara
 import (
 	"fmt"
 	"testing"
-	"github.com/vantorrewannes/file-scanner/pkg/file_scanner/yara"
+
+	"github.com/vantorrewannes/file-scanner/pkg/disk-watcher/yara"
 )
 
 func TestByteScanner(t *testing.T) {

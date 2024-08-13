@@ -2,7 +2,8 @@ package test_yara
 
 import (
 	"testing"
-	"github.com/vantorrewannes/file-scanner/pkg/file_scanner/yara"
+
+	"github.com/vantorrewannes/file-scanner/pkg/disk-watcher/yara"
 )
 
 func TestStringRuleFactory(t *testing.T) {

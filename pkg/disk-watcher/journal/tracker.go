@@ -44,6 +44,9 @@ func (diskTracker *DiskTracker) Track(ctx context.Context, reason usn.Reason) (<
 	}
 
 	filter := func(record usn.Record) bool {
+		if reason == usn.ReasonAny {
+			return true
+		}
 		return record.Reason == reason
 	}
 	filer := cache.Filer

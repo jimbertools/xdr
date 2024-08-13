@@ -32,7 +32,7 @@ func (diskWatcher *DiskWatcher) Watch(ctx context.Context) error {
 	}
 	defer diskTracker.Close()
 
-	recordChannel, errorChannel, err := diskTracker.Track(context.Background(), usn.ReasonFileCreate)
+	recordChannel, errorChannel, err := diskTracker.Track(context.Background(), usn.ReasonAny)
 	if err != nil {
 		log.Fatal(err)
 	}

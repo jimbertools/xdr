@@ -3,6 +3,7 @@ package yara
 import (
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/hillu/go-yara/v4"
 )
@@ -45,7 +46,8 @@ func NewFileRuleFactory(rulesFilePaths []string) *FileRuleFactory {
 	for _, ruleFilePath := range rulesFilePaths {
 		ruleFile, err := os.Open(ruleFilePath)
 		if err != nil {
-			log.Println("Error opening YARA rule file:", err)
+			fullpath, _ := filepath.Abs(ruleFilePath)
+			log.Fatalf("Error opening YARA rule file: %s with error: %s", fullpath, err)
 			continue
 		}
 		if err = ruleCompiler.AddFile(ruleFile, ""); err != nil {

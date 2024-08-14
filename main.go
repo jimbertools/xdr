@@ -8,9 +8,9 @@ import (
 
 	"github.com/hillu/go-yara/v4"
 	"github.com/jimbertools/volmgmt/usn"
-	"github.com/vantorrewannes/watcheye/pkg/watcheye/disk/journal"
-	"github.com/vantorrewannes/watcheye/pkg/watcheye/disk/watcher"
-	"github.com/vantorrewannes/watcheye/pkg/watcheye/yara/scanner"
+	"github.com/jimbertools/xdr/pkg/xdr/disk/journal"
+	"github.com/jimbertools/xdr/pkg/xdr/disk/watcher"
+	"github.com/jimbertools/xdr/pkg/xdr/yara/scanner"
 )
 
 func main() {

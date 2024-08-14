@@ -3,7 +3,7 @@ package rules_test
 import (
 	"testing"
 
-	"github.com/vantorrewannes/watcheye/pkg/watcheye/yara/rules"
+	"github.com/jimbertools/xdr/pkg/watcheye/yara/rules"
 )
 
 func TestNewRuleFactory(t *testing.T) {

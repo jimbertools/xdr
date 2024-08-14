@@ -3,11 +3,11 @@ package scanner_test
 import (
 	"testing"
 
-	"github.com/vantorrewannes/watcheye/pkg/watcheye/yara/scanner"
+	"github.com/jimbertools/xdr/pkg/xdr/yara/scanner"
 )
 
 func TestNewYaraScanner(t *testing.T) {
-	const ruleFilePath = "..\\..\\..\\..\\test\\testdata\\watcheye\\yara\\rules\\abc_rule.yar"
+	const ruleFilePath = "..\\..\\..\\..\\test\\testdata\\xdr\\yara\\rules\\abc_rule.yar"
 	_, err := scanner.YaraScannerFromRuleFile(ruleFilePath)
 	if err != nil {
 		t.Fatal(err)
@@ -15,7 +15,7 @@ func TestNewYaraScanner(t *testing.T) {
 }
 
 func TestYaraScannerScanString(t *testing.T) {
-	const ruleFilePath = "..\\..\\..\\..\\test\\testdata\\watcheye\\yara\\rules\\abc_rule.yar"
+	const ruleFilePath = "..\\..\\..\\..\\test\\testdata\\xdr\\yara\\rules\\abc_rule.yar"
 	yaraScanner, err := scanner.YaraScannerFromRuleFile(ruleFilePath)
 	if err != nil {
 		t.Fatal(err)

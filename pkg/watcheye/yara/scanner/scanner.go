@@ -1,8 +1,6 @@
 package scanner
 
 import (
-	"os"
-
 	"github.com/hillu/go-yara/v4"
 	"github.com/vantorrewannes/watcheye/pkg/watcheye/yara/rules"
 )
@@ -15,8 +13,8 @@ func NewYaraScanner(rules *yara.Rules) *YaraScanner {
 	return &YaraScanner{rules: rules}
 }
 
-func YaraScannerFromRulesFactory(factory rules.RuleFactory) (*YaraScanner, error) {
-	yaraRules, err := factory.Rules()
+func YaraScannerFromRulesFactory(factory rules.YaraRuleFactory) (*YaraScanner, error) {
+	yaraRules, err := factory.GetRules()
 	if err != nil {
 		return nil, err
 	}
@@ -24,31 +22,27 @@ func YaraScannerFromRulesFactory(factory rules.RuleFactory) (*YaraScanner, error
 }
 
 func YaraScannerFromRuleFile(ruleFilePath string) (*YaraScanner, error) {
-	ruleFile, err := os.Open(ruleFilePath)
+	yaraRuleFactory, err := rules.NewRuleFactory()
 	if err != nil {
 		return nil, err
 	}
-	fileRulesFactory, err := rules.NewFileRuleFactory()
+	err = yaraRuleFactory.AddRuleFile(ruleFilePath)
 	if err != nil {
 		return nil, err
 	}
-	err = fileRulesFactory.AddRule(ruleFile)
-	if err != nil {
-		return nil, err
-	}
-	return YaraScannerFromRulesFactory(fileRulesFactory)
+	return YaraScannerFromRulesFactory(*yaraRuleFactory)
 }
 
 func YaraScannerFromRuleString(ruleString string) (*YaraScanner, error) {
-	stringRulesFactory, err := rules.NewStringRuleFactory()
+	yaraRuleFactory, err := rules.NewRuleFactory()
 	if err != nil {
 		return nil, err
 	}
-	err = stringRulesFactory.AddRule(ruleString)
+	err = yaraRuleFactory.AddRuleString(ruleString)
 	if err != nil {
 		return nil, err
 	}
-	return YaraScannerFromRulesFactory(stringRulesFactory)
+	return YaraScannerFromRulesFactory(*yaraRuleFactory)
 }
 
 func (scanner *YaraScanner) ScanFile(filePath string) (yara.MatchRules, error) {

@@ -21,8 +21,8 @@ func FileRuleFactoryFromCompiler(compiler *yara.Compiler) *FileRuleFactory {
 	return &FileRuleFactory{compiler: compiler}
 }
 
-func (factory *FileRuleFactory) AddRule(path *os.File) error {
-	return factory.compiler.AddFile(path, "custom")
+func (factory *FileRuleFactory) AddRule(file *os.File) error {
+	return factory.compiler.AddFile(file, "custom")
 }
 
 func (factory *FileRuleFactory) Rules() (*yara.Rules, error) {

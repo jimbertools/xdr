@@ -1,13 +1,13 @@
-package service_test
+package rules_test
 
 import (
 	"testing"
 
-	"github.com/vantorrewannes/watcheye/pkg/watcheye/yara/rules/service"
+	"github.com/vantorrewannes/watcheye/pkg/watcheye/yara/rules"
 )
 
 func TestStringRuleService(t *testing.T) {
-	stringRulesService, err := service.NewStringRuleFactory()
+	stringRulesService, err := rules.NewStringRuleFactory()
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -1,4 +1,4 @@
-package service
+package rules
 
 import "github.com/hillu/go-yara/v4"
 

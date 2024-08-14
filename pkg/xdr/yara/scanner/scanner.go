@@ -2,7 +2,7 @@ package scanner
 
 import (
 	"github.com/hillu/go-yara/v4"
-	"github.com/vantorrewannes/watcheye/pkg/watcheye/yara/rules"
+	"github.com/jimbertools/xdr/pkg/xdr/yara/rules"
 )
 
 type YaraScanner struct {

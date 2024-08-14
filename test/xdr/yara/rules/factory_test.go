@@ -3,7 +3,7 @@ package rules_test
 import (
 	"testing"
 
-	"github.com/vantorrewannes/watcheye/pkg/watcheye/yara/rules"
+	"github.com/jimbertools/xdr/pkg/xdr/yara/rules"
 )
 
 func TestNewRuleFactory(t *testing.T) {
@@ -18,7 +18,7 @@ func TestAddRule(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	const ruleFilePath = "..\\..\\..\\..\\test\\testdata\\watcheye\\yara\\rules\\abc_rule.yar"
+	const ruleFilePath = "..\\..\\..\\..\\test\\testdata\\xdr\\yara\\rules\\abc_rule.yar"
 	err = yaraRuleFactory.AddRuleFile(ruleFilePath)
 	if err != nil {
 		t.Fatal(err)
@@ -30,7 +30,7 @@ func TestGetRules(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	const ruleFilePath = "..\\..\\..\\..\\test\\testdata\\watcheye\\yara\\rules\\abc_rule.yar"
+	const ruleFilePath = "..\\..\\..\\..\\test\\testdata\\xdr\\yara\\rules\\abc_rule.yar"
 	err = yaraRuleFactory.AddRuleFile(ruleFilePath)
 	if err != nil {
 		t.Fatal(err)

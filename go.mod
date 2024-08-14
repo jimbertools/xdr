@@ -1,4 +1,4 @@
-module github.com/vantorrewannes/watcheye
+module github.com/jimbertools/xdr
 
 go 1.22.6
 

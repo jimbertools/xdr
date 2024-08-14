@@ -1,7 +1,6 @@
 package service
 
 import (
-	"log"
 	"os"
 	"github.com/hillu/go-yara/v4"
 )
@@ -10,12 +9,12 @@ type FileRuleFactory struct {
 	compiler *yara.Compiler
 }
 
-func NewFileRuleFactory() *FileRuleFactory {
+func NewFileRuleFactory() (*FileRuleFactory, error) {
 	compiler, err := yara.NewCompiler()
 	if err != nil {
-		log.Fatalln(err)
+		return nil, err
 	}
-	return FileRuleFactoryFromCompiler(compiler)
+	return FileRuleFactoryFromCompiler(compiler), nil
 }
 
 func FileRuleFactoryFromCompiler(compiler *yara.Compiler) *FileRuleFactory {

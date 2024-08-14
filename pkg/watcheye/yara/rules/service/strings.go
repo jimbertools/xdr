@@ -1,8 +1,6 @@
 package service
 
 import (
-	"log"
-
 	"github.com/hillu/go-yara/v4"
 )
 
@@ -10,12 +8,12 @@ type StringRuleFactory struct {
 	compiler *yara.Compiler
 }
 
-func NewStringRuleFactory() *StringRuleFactory {
+func NewStringRuleFactory() (*StringRuleFactory, error) {
 	compiler, err := yara.NewCompiler()
 	if err != nil {
-		log.Fatalln(err)
+		return nil, err
 	}
-	return StringRuleFactoryFromCompiler(compiler)
+	return StringRuleFactoryFromCompiler(compiler), nil
 }
 
 func StringRuleFactoryFromCompiler(compiler *yara.Compiler) *StringRuleFactory {

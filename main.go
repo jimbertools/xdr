@@ -3,34 +3,32 @@ package main
 import (
 	"context"
 	"log"
-	"os"
 
-	disk_watcher "github.com/vantorrewannes/file-scanner/pkg/disk-watcher"
-	"github.com/vantorrewannes/file-scanner/pkg/disk-watcher/yara"
+	"github.com/hillu/go-yara/v4"
+	"github.com/jimbertools/volmgmt/usn"
+	"github.com/vantorrewannes/watcheye/pkg/watcheye/disk/journal"
+	"github.com/vantorrewannes/watcheye/pkg/watcheye/disk/watcher"
+	"github.com/vantorrewannes/watcheye/pkg/watcheye/yara/scanner"
 )
 
 func main() {
-	if len(os.Args) < 2 {
-		log.Fatal("Please provide disk letter")
-	} else if len(os.Args) < 3 {
-		log.Fatal("Please provide YARA rule path")
-	}
-
-	disk := os.Args[1]
-	yaraRulesPath := os.Args[2]
-	
-
-	factory := yara.NewFileRuleFactory([]string{yaraRulesPath})
-	rules, err := factory.GetAllRules()
-	if err != nil {
-		log.Fatalf(`GetAllRules() error = %v`, err)
-	}
-
-	diskWatcher := disk_watcher.NewDiskWatcher(rune(disk[0]), rules)
-	ctx := context.Background()
-
-	err = diskWatcher.Watch(ctx)
+	const ruleFilePath = "rules.yar"
+	yaraScanner, err := scanner.YaraScannerFromRuleFile(ruleFilePath)
 	if err != nil {
 		log.Fatal(err)
 	}
+	ctx := context.Background()
+	watcher := watcher.NewWatcher(yaraScanner, onYaraMatch, onNoYaraMatch)
+	err = watcher.Watch(journal.C, usn.ReasonFileCreate, ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func onYaraMatch(record usn.Record, path string, matches *yara.MatchRules) { 
+	log.Println("VIRUS:", path)
+}
+
+func onNoYaraMatch(record usn.Record, path string) {
+	log.Println("CLEAN:", path)
 }

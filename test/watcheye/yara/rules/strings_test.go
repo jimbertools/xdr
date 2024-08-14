@@ -6,7 +6,7 @@ import (
 	"github.com/vantorrewannes/watcheye/pkg/watcheye/yara/rules"
 )
 
-func TestStringRuleService(t *testing.T) {
+func TestStringRuleFactory(t *testing.T) {
 	stringRulesService, err := rules.NewStringRuleFactory()
 	if err != nil {
 		t.Fatal(err)

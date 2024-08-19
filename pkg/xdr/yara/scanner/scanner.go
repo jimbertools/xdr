@@ -1,6 +1,9 @@
 package scanner
 
 import (
+	"io/fs"
+	"path/filepath"
+
 	"github.com/hillu/go-yara/v4"
 	"github.com/jimbertools/xdr/pkg/xdr/yara/rules"
 )
@@ -39,6 +42,31 @@ func YaraScannerFromRuleString(ruleString string) (*YaraScanner, error) {
 		return nil, err
 	}
 	err = yaraRuleFactory.AddRuleString(ruleString)
+	if err != nil {
+		return nil, err
+	}
+	return YaraScannerFromRulesFactory(*yaraRuleFactory)
+}
+
+func YaraScannerFromRuleDir(dirPath string) (*YaraScanner, error) { 
+	yaraRuleFactory, err := rules.NewRuleFactory()
+	if err != nil {
+		return nil, err
+	}
+	err = filepath.WalkDir(dirPath,
+		func(path string, dirEntry fs.DirEntry, err error) error {
+			if err != nil {
+				return err
+			}
+			if dirEntry.IsDir() || filepath.Ext(path) != ".yara" {
+				return nil
+			}
+			err = yaraRuleFactory.AddRuleFile(path)
+			if err != nil {
+				return err
+			}
+			return nil
+		})
 	if err != nil {
 		return nil, err
 	}

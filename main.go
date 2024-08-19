@@ -8,7 +8,6 @@ import (
 
 	"github.com/hillu/go-yara/v4"
 	"github.com/jimbertools/volmgmt/usn"
-	"github.com/jimbertools/xdr/pkg/xdr/disk/journal"
 	"github.com/jimbertools/xdr/pkg/xdr/disk/watcher"
 	"github.com/jimbertools/xdr/pkg/xdr/yara/scanner"
 )
@@ -44,7 +43,8 @@ func main() {
 	}
 	ctx := context.Background()
 	watcher := watcher.NewWatcher(yaraScanner, onYaraMatch, onNoYaraMatch)
-	err = watcher.Watch(journal.C, usnReason, ctx)
+	// err = watcher.WatchDisk(journal.C, usnReason, ctx)
+	err = watcher.WatchAllDisks(usnReason, ctx)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -9,6 +9,7 @@ import (
 	"github.com/jimbertools/volmgmt/usn"
 	"github.com/jimbertools/xdr/pkg/xdr/disk/journal"
 	"github.com/jimbertools/xdr/pkg/xdr/yara/scanner"
+	"github.com/shirou/gopsutil/disk"
 )
 
 type OnYaraMatch func(record usn.Record, path string, matches *yara.MatchRules)
@@ -24,7 +25,7 @@ func NewWatcher(yaraScanner *scanner.YaraScanner, onYaraMatch OnYaraMatch, onNoY
 	return &Watcher{yaraScanner: yaraScanner, onYaraMatch: onYaraMatch, onNoYaraMatch: onNoYaraMatch}
 }
 
-func (watcher *Watcher) Watch(diskLetter journal.DiskLetter, reason usn.Reason, ctx context.Context) error {
+func (watcher *Watcher) WatchDisk(diskLetter journal.DiskLetter, reason usn.Reason, ctx context.Context) error {
 	journal, err := journal.NewJournal(diskLetter)
 	if err != nil {
 		return err
@@ -52,13 +53,27 @@ func (watcher *Watcher) Watch(diskLetter journal.DiskLetter, reason usn.Reason, 
 	}
 }
 
+func (watcher *Watcher) WatchAllDisks(reason usn.Reason, ctx context.Context) error {
+	partitions, err := disk.Partitions(false)
+	if err != nil {
+		return err
+	}
+	for _, partition := range partitions {
+		if partition.Fstype == "NTFS" {
+			diskLetter := journal.DiskLetter(([]rune(partition.Mountpoint)[0]))
+			watcher.WatchDisk(diskLetter, reason, ctx)
+		}
+	}
+	return nil
+}
+
 func (watcher *Watcher) processRecord(record usn.Record, diskLetter journal.DiskLetter, maxTries int) {
 	recordPath := fmt.Sprintf(`%s:\\%s`, string(diskLetter), record.Path)
 	for tries := 0; tries < maxTries; tries++ {
 		matches, err := watcher.yaraScanner.ScanFile(recordPath)
 		if err == nil {
 			if len(matches) > 0 {
-				
+
 				if watcher.onYaraMatch != nil {
 					watcher.onYaraMatch(record, recordPath, &matches)
 				}

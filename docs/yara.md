@@ -135,7 +135,7 @@ To install Yara on Windows, you'll need to build the latest release from VirusTo
    }
    ```
 
-3. Compile and run the program with:
+3. **Compile and run the program with**:
 
    ```bash
    go build -ldflags "-extldflags=-static" -tags yara_static main.go
@@ -144,7 +144,7 @@ To install Yara on Windows, you'll need to build the latest release from VirusTo
 ## Troubleshooting
 
 - **Linker or GCC Errors:**  
-  If you encounter errors related to undefined keywords from the Yara library, your Go environment might be misconfigured. Reinstall Go using the [Go installer](https://go.dev/dl/) for Windows, then repeat steps 10 to 14.
+  If you encounter errors related to undefined keywords from the Yara library, your Go environment might be misconfigured. Reinstall Go using the [Go installer](https://go.dev/dl/) for Windows. Make sure to build with the recommended build command for the first time.
 
 - **General Issues:**  
   If other issues arise, ensure no conflicting entries exist in your system environment variables for Go, MinGW, or Yara. Uninstall any conflicting versions, then restart the installation process from the beginning.
